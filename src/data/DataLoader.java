@@ -1,39 +1,34 @@
 package data;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.io.*;
-import java.util.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 
-// Class responsible for reading and processing data from the CSV file
-class DataLoader {
-    public static ArrayList<Activity> loadActivityData(String filePath) {
-        ArrayList<Activity> activityList = new ArrayList<>();
-        try (Stream<String> lines = Files.lines(Paths.get(filePath))) {
-            List<String> dataLines = lines.skip(1).collect(Collectors.toList()); // Skip header row
-
-            for (String line : dataLines) {
+public class DataLoader {
+    public static List<Activity> loadData(String filePath) {
+        List<Activity> activities = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            br.readLine(); // Skip header row
+            while ((line = br.readLine()) != null) {
                 String[] values = line.split(",");
-                System.out.println("Columns found: " + values.length + " | Data: " + line); // Debugging line
-
-                if (values.length >= 15) { // Ensure at least 15 columns exist
-                    activityList.add(new Activity(
-                            values[0], values[1], Integer.parseInt(values[2]),
-                            Integer.parseInt(values[10]), Integer.parseInt(values[13]), Integer.parseInt(values[14]) // Fix index
-                    ));
-                } else {
-                    System.out.println("Skipping invalid row: " + line);
+                if (values.length >= 6) {
+                    Activity activity = new Activity(
+                            values[0], // ID
+                            values[1], // Date
+                            Integer.parseInt(values[2]), // Steps
+                            Integer.parseInt(values[3]), // Active Minutes
+                            Integer.parseInt(values[4]), // Sedentary Minutes
+                            Integer.parseInt(values[5])  // Calories
+                    );
+                    activities.add(activity);
                 }
             }
-        } catch (IOException e) {
-            System.out.println("Error: Could not find file at " + filePath);
+        } catch (Exception e) {
+            System.out.println("Error loading data: " + e.getMessage());
             e.printStackTrace();
         }
-        return activityList;
+        return activities;
     }
-
 }

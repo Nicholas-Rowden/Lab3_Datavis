@@ -1,20 +1,15 @@
 package data;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.io.*;
-import java.util.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 // Class representing an activity record from the dataset
-class Activity {
-    String id, date;
-    int totalSteps, veryActiveMinutes, sedentaryMinutes, calories;
+public class Activity {
+    private final String id;
+    private final String date;
+    private final int totalSteps;
+    private final int veryActiveMinutes;
+    private final int sedentaryMinutes;
+    private final int calories;
 
-    // Constructor to initialize an activity instance
+    // Constructor
     public Activity(String id, String date, int totalSteps, int veryActiveMinutes, int sedentaryMinutes, int calories) {
         this.id = id;
         this.date = date;
@@ -24,9 +19,18 @@ class Activity {
         this.calories = calories;
     }
 
-    // Override toString() to format output for console display
+    // Getters for table display
+    public String getId() { return id; }
+    public String getDate() { return date; }
+    public int getTotalSteps() { return totalSteps; }
+    public int getVeryActiveMinutes() { return veryActiveMinutes; }
+    public int getSedentaryMinutes() { return sedentaryMinutes; }
+    public int getCalories() { return calories; }
+
+    // Override toString for debugging
     @Override
     public String toString() {
-        return "ID: " + id + ", Date: " + date + ", Steps: " + totalSteps + ", Active Minutes: " + veryActiveMinutes + ", Sedentary Minutes: " + sedentaryMinutes + ", Calories: " + calories;
+        return String.format("ID: %s, Date: %s, Steps: %d, Active Min: %d, Sedentary Min: %d, Calories: %d",
+                id, date, totalSteps, veryActiveMinutes, sedentaryMinutes, calories);
     }
 }
