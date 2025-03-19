@@ -5,19 +5,23 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        // Use a relative path for the data file
-        String filePath = "C:/Users/rowde/OneDrive/Documents/classes/Spring 2025/Java/labs/Lab3/src/Resources/data.csv";
-
+        // Use correct relative path inside 'src/Resources/'
+        String filePath = Paths.get("src", "Resources", "dailyActivity_merged.csv").toString();
 
         // Load data
         List<Activity> activities = DataLoader.loadData(filePath);
 
         if (activities.isEmpty()) {
             System.out.println("Error: No data loaded!");
-            return; // Exit if no data is found
+            return;
         }
 
+        // Print console output
+        System.out.println("First entry: " + activities.get(0));
+        System.out.println("Tenth entry: " + (activities.size() >= 10 ? activities.get(9) : "Less than 10 entries available."));
+        System.out.println("Total entries: " + activities.size());
+
         // Start the GUI
-        DataViewer.createGUI();
+        DataViewer.createGUI(activities);
     }
 }

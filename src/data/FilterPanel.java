@@ -19,9 +19,9 @@ public class FilterPanel extends JPanel {
 
         applyFilter.addActionListener(e -> {
             try {
-                Integer minSteps = minStepsField.getText().isEmpty() ? null : Integer.parseInt(minStepsField.getText().trim());
-                Integer maxCalories = maxCaloriesField.getText().isEmpty() ? null : Integer.parseInt(maxCaloriesField.getText().trim());
-                Integer minActiveMinutes = minActiveMinutesField.getText().isEmpty() ? null : Integer.parseInt(minActiveMinutesField.getText().trim());
+                Integer minSteps = parseInteger(minStepsField.getText());
+                Integer maxCalories = parseInteger(maxCaloriesField.getText());
+                Integer minActiveMinutes = parseInteger(minActiveMinutesField.getText());
 
                 List<Activity> filteredData = allActivities.stream()
                         .filter(a -> (minSteps == null || a.getTotalSteps() >= minSteps))
@@ -50,5 +50,9 @@ public class FilterPanel extends JPanel {
         add(minActiveMinutesField);
         add(applyFilter);
         add(clearFilter);
+    }
+
+    private Integer parseInteger(String text) {
+        return text.isEmpty() ? null : Integer.parseInt(text.trim());
     }
 }

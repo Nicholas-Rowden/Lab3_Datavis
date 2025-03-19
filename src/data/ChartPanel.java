@@ -21,17 +21,22 @@ public class ChartPanel extends JPanel {
         super.paintComponent(g);
         if (activities == null || activities.isEmpty()) return;
 
-        g.setFont(new Font("SansSerif", Font.BOLD, 12));
-        g.drawString("Daily Steps", 50, 20);
+        g.setFont(new Font("SansSerif", Font.BOLD, 14));
+        g.drawString("Daily Steps Chart", 200, 20);
+        g.drawString("Date", 250, 380);
+        g.drawString("Steps", 10, 180);
+
         int x = 50;
         int maxSteps = activities.stream().mapToInt(Activity::getTotalSteps).max().orElse(1);
+        int minSteps = activities.stream().mapToInt(Activity::getTotalSteps).min().orElse(0);
+        int rangeSteps = Math.max(1, maxSteps - minSteps);
 
         for (Activity activity : activities) {
-            int barHeight = (int) ((double) activity.getTotalSteps() / maxSteps * 350);
+            int barHeight = (int) ((double) (activity.getTotalSteps() - minSteps) / rangeSteps * 300);
             g.setColor(Color.BLUE);
-            g.fillRect(x, 350 - barHeight + 50, 40, barHeight);
+            g.fillRect(x, 350 - barHeight, 40, barHeight);
             g.setColor(Color.BLACK);
-            g.drawRect(x, 350 - barHeight + 50, 40, barHeight);
+            g.drawRect(x, 350 - barHeight, 40, barHeight);
             g.drawString(activity.getDate(), x, 370);
             x += 50;
         }

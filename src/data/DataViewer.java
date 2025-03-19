@@ -1,11 +1,8 @@
 package data;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.util.List;
-import java.nio.file.Paths;
 
 public class DataViewer {
     private static TablePanel tablePanel;
@@ -14,18 +11,11 @@ public class DataViewer {
     private static DetailsPanel detailsPanel;
     private static FilterPanel filterPanel;
 
-    public static void createGUI() {
-        // Use a relative path for the data file
-        String filePath = Paths.get("src", "Resources", "data.csv").toString();
-
-        // Load data
-        List<Activity> activities = DataLoader.loadData(filePath);
-
+    public static void createGUI(List<Activity> activities) {
         if (activities.isEmpty()) {
-            System.out.println("Error: No data loaded from file " + filePath);
-            return; // Exit if no data is found
+            System.out.println("Error: No data to display.");
+            return;
         }
-        System.out.println("Loaded " + activities.size() + " records from " + filePath);
 
         JFrame frame = new JFrame("Activity Data Viewer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,7 +27,7 @@ public class DataViewer {
         chartPanel = new ChartPanel();
         detailsPanel = new DetailsPanel();
 
-        // FilterPanel setup with lambda expressions for updating panels
+        // FilterPanel setup
         filterPanel = new FilterPanel(filteredData -> {
             tablePanel.updateTable(filteredData);
             statsPanel.updateStats(filteredData);
@@ -58,21 +48,6 @@ public class DataViewer {
         frame.add(chartPanel, BorderLayout.EAST);
         frame.add(detailsPanel, BorderLayout.WEST);
 
-        // Table selection listener to update details and chart
-        tablePanel.getTable().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting() && tablePanel.getTable().getSelectedRow() != -1) {
-                    int row = tablePanel.getTable().getSelectedRow();
-                    if (row >= 0 && row < activities.size()) {
-                        detailsPanel.updateDetails(activities.get(row));
-                        chartPanel.updateChart(List.of(activities.get(row))); // Show only selected data
-                    }
-                }
-            }
-        });
-
-        // Set frame properties
         frame.setSize(1000, 600);
         frame.setVisible(true);
     }
