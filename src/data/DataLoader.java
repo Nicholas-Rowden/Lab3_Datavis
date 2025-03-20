@@ -6,7 +6,17 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Utility class for loading activity data from a CSV file.
+ * Parses and converts data into a list of Activity objects.
+ */
 public class DataLoader {
+    /**
+     * Loads activity data from the specified CSV file.
+     *
+     * @param filePath The path to the CSV file
+     * @return List of Activity objects representing the data
+     */
     public static List<Activity> loadData(String filePath) {
         List<Activity> activities = new ArrayList<>();
         File file = new File(filePath);
@@ -48,6 +58,13 @@ public class DataLoader {
         return activities;
     }
 
+    /**
+     * Parses a numeric string and converts it to an integer.
+     * Handles cases where the value might be in decimal format.
+     *
+     * @param value The numeric string to parse
+     * @return The parsed integer value, or 0 if invalid
+     */
     private static int parseDoubleToInt(String value) {
         try {
             return (int) Math.round(Double.parseDouble(value.trim()));
